@@ -35,7 +35,7 @@
 #define SEEK_END      2      /* Seek relative to end of file */
 
 /* Added by TranquilMarmot  */
-#define HELLO_WORLD 0
+#define HELLO_WORLD 32
 
 /* The codes for ioctl are in kern/ioctl.h */
 /* The codes for stat/fstat/lstat are in kern/stat.h */

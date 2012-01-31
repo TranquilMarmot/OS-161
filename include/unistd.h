@@ -124,7 +124,7 @@ int __getcwd(char *buf, size_t buflen);
 /* lstat - see sys/stat.h */
 
 /* Added by TranquilMarmot */
-int helloworld(void);
+int sys_helloworld(void);
 
 /*
  * These are not themselves system calls, but wrapper routines in libc.

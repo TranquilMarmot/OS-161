@@ -1,6 +1,7 @@
+
 #include <unistd.h>
 
 int main(){
-	_helloworld();
+	helloworld();
 	return 0;
 }
