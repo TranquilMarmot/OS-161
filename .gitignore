@@ -1,2 +1,3 @@
 defs.mk
 .cvsignore
+cscope.out

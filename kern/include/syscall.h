@@ -6,6 +6,7 @@
  */
 
 int sys_reboot(int code);
+int sys_helloworld(void);
 
 
 #endif /* _SYSCALL_H_ */
