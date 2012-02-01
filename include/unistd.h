@@ -125,8 +125,9 @@ int __getcwd(char *buf, size_t buflen);
 
 /* Added by TranquilMarmot */
 int sys_helloworld(void);
+int sys_printint(int value);
 int sys__exit(int code);
-int sys__write(int fd, const void * buf, size_t nbytes);
+//int sys__write(int fd, const void * buf, size_t nbytes);
 
 /*
  * These are not themselves system calls, but wrapper routines in libc.

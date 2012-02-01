@@ -10,6 +10,10 @@ int sys_helloworld(void){
 	return 0;
 }
 
+int sys_printint(int value){
+	return kprintf("%d", value);
+}
+
 
 int sys__exit(int code){
 	thread_exit();

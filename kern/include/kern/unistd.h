@@ -36,6 +36,7 @@
 
 /* Added by TranquilMarmot  */
 #define HELLO_WORLD 32
+#define PRINT_INT   33
 
 /* The codes for ioctl are in kern/ioctl.h */
 /* The codes for stat/fstat/lstat are in kern/stat.h */

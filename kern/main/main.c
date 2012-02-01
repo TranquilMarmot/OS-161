@@ -82,6 +82,7 @@ boot(void)
 	vfs_setbootfs("emu0");
 
 	sys_helloworld();
+	sys_printint(4);
 
 
 	/*

@@ -74,6 +74,9 @@ mips_syscall(struct trapframe *tf)
 	    case SYS_helloworld:
 		err = sys_helloworld();		
 		break;
+	    case SYS_printint:
+		err = sys_printint(tf->tf_a0);
+		break;
 	    case SYS__exit:
 		err = sys__exit(tf->tf_a0);
 		break;

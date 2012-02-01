@@ -2,6 +2,7 @@
 #include <unistd.h>
 
 int main(){
-	helloworld();
-	return 0;
+	//return helloworld();
+	int num = 42;
+	return printint(num);
 }
