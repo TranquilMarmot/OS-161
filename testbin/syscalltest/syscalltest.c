@@ -4,5 +4,6 @@
 int main(){
 	//return helloworld();
 	int num = 42;
-	return printint(num);
+	printint(num);
+	return 0;
 }

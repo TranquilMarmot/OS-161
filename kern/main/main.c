@@ -84,6 +84,8 @@ boot(void)
 	sys_helloworld();
 	sys_printint(4);
 
+	sys_printstring("print a string\n", 16);
+
 
 	/*
 	 * Make sure various things aren't screwed up.

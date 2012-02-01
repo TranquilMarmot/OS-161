@@ -14,6 +14,17 @@ int sys_printint(int value){
 	return kprintf("%d", value);
 }
 
+int sys_printstring(char *string, int numchars){
+	int i;
+	
+	char arr[numchars];
+	for(i = 0; i < numchars; i++){
+		arr[i] = string[i];
+	}
+
+	return kprintf(arr);
+}
+
 
 int sys__exit(int code){
 	thread_exit();
