@@ -16,6 +16,7 @@
 #include <vm.h>
 #include <syscall.h>
 #include <version.h>
+#include "opt-A0.h"
 
 /*
  * These two pieces of data are maintained by the makefiles and build system.
@@ -81,8 +82,10 @@ boot(void)
 	/* Default bootfs - but ignore failure, in case emu0 doesn't exist */
 	vfs_setbootfs("emu0");
 
+	#if OPT_A0
 	sys_helloworld();
 	sys_printint(4);
+	#endif //OPT_A0
 
 	sys_printstring("print a string\n", 16);
 

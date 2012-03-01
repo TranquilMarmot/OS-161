@@ -1,6 +1,0 @@
-# Make these files, please!
-
-SRCS = syscalltest.c
-PROG = syscalltest
-BINDIR = /testbin
-
