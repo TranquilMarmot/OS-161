@@ -35,7 +35,11 @@
 #define SEEK_END      2      /* Seek relative to end of file */
 
 /* Added by TranquilMarmot  */
-#define HELLO_WORLD 32
+int sys_helloworld(void);
+int sys_printin(int value);
+int sys__exit(int code);
+int sys__write(int fd, const void * buf, size_t nbytes);
+
 
 /* The codes for ioctl are in kern/ioctl.h */
 /* The codes for stat/fstat/lstat are in kern/stat.h */
