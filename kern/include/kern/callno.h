@@ -41,8 +41,9 @@
 #define SYS_stat         30
 #define SYS_lstat        31
 #define SYS_helloworld   32
-#define SYS__exit        33
 #define SYS_printint     34
+#define SYS__print       35
+#define SYS__write       36
 /*CALLEND*/
 
 

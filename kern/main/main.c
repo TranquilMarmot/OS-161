@@ -37,7 +37,6 @@ static const char harvard_copyright[] =
     "Copyright (c) 2000, 2001, 2002, 2003\n"
     "   President and Fellows of Harvard College.  All rights reserved.\n";
 
-
 /*
  * Initial boot sequence.
  */
@@ -62,6 +61,8 @@ boot(void)
 	 * dev/generic/console.c).
 	 */
 
+	dbflags = DB_SYSCALL;
+
 	kprintf("\n");
 	kprintf("OS/161 base system version %s\n", BASE_VERSION);
 	kprintf("%s", harvard_copyright);
@@ -83,11 +84,11 @@ boot(void)
 	vfs_setbootfs("emu0");
 
 	#if OPT_A0
-	sys_helloworld();
-	sys_printint(4);
+	_helloworld();
+	_printint(4);
 	#endif //OPT_A0
 
-	sys_printstring("print a string\n", 16);
+	//sys_printstring("print a string\n", 16);
 
 
 	/*
