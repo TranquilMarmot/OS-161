@@ -16,6 +16,8 @@ int sys_printint(int value){
 
 int sys_printstring(char *string, int numchars){
 	int i;
+
+	// FIXME Use copyin here?
 	
 	char arr[numchars];
 	for(i = 0; i < numchars; i++){
