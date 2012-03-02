@@ -42,18 +42,17 @@ int __write(int src, const void * dest, size_t nbytes){
 		return -EFAULT;
 	*/
 
-	// the actual length of the string
-	size_t * actual;
-
 	int err;
-	if ( (err = copyinstr ((const_userptr_t)src, dest, nbytes, actual))){
-		kprintf("buf: %s, kbuf %s, nbytes: %u, actual bytes: %u", (char *)src, (char *)dest, nbytes, actual);
+	if (!(err = copyin ((const_userptr_t)src, dest, nbytes))){
+		kprintf("src: %u, dest %s, numbytes %u\n", src, (char *)dest, nbytes);
 		return -err;
 	}
 
+	char * str = (char *) dest;
+
 	/* make sure the string is 0 terminated */
-	//dest[*actual] = '\0';
+	str[nbytes] = '\0';
 	
 	/* kprintf returns the number of chars printed */
-	return kprintf(dest);
+	return kprintf("%s", str);
 }

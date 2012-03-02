@@ -61,7 +61,7 @@ boot(void)
 	 * dev/generic/console.c).
 	 */
 
-	dbflags = DB_SYSCALL;
+	//dbflags = DB_SYSCALL;
 
 	kprintf("\n");
 	kprintf("OS/161 base system version %s\n", BASE_VERSION);
