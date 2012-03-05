@@ -7,6 +7,7 @@
 #define THREAD_RUNTIME 100
 
 static struct semaphore **sem = NULL;
+static struct lock **countLock = NULL;
 
 static int counter = 0;
 
@@ -39,12 +40,88 @@ static void unsafecountingThread(void* whatever, unsigned long threadNum){
 	V(sem);
 }
 
+static void safecountingThread(void* whatever, unsigned long threadNum){
+	int incamount = '0' + (threadNum - '0');
+
+	(void)whatever;
+	
+	lock_acquire(countLock);
+	int i;
+	for(i = 0; i < incamount; i++){
+		counter++;
+		kprintf("|%d|", counter);	
+	}
+	lock_release(countLock);
+
+	V(sem);
+}
+
+
 static void initSem(void){
 	if(sem == NULL){
 		sem = sem_create("sem", 0);
 		if(sem == NULL)
 			panic("threadtest: sem_create failed\n");
 	}
+}
+
+static void initLock(void){
+	if(countLock == NULL){
+		countLock = lock_create("countLock");
+		if(countLock == NULL)
+			panic("threadtest: lock_create failed\n");
+	}
+}
+
+int safecounter(int nargs, char **args){
+	int numthreads, incamount;
+
+	if(nargs == 1){
+		numthreads = 15;
+		incamount = 30;
+	} else{
+		numthreads = args[1][0] - '0';
+		incamount = args[2][0] - '0';
+	}
+
+	kprintf("Let's count, with locks! Making %d threads that count by %d each...\n", numthreads, incamount);
+
+	(void)nargs;
+	(void)args;
+
+	initLock();
+	initSem();
+
+	char name[16];
+
+	int i, result;
+	for(i = 0; i < numthreads; i++){
+		snprintf(name, sizeof(name), "count%d", i);
+
+		result = thread_fork(
+				name,
+				NULL,
+				incamount,
+				safecountingThread,
+				NULL
+			);
+
+		if(result)
+			panic(
+				"safecount: thread_fork failed %s)\n",
+				strerror(result)
+			);
+
+	}
+
+	for(i = 0; i < numthreads; i++)
+		P(sem);
+	
+	kprintf("\nDone counting! Counter is now %d (expected: %d)\n", counter, numthreads * incamount);
+
+	counter = 0;
+
+	return 0;
 }
 
 int unsafecounter(int nargs, char **args){

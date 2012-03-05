@@ -115,6 +115,7 @@ lock_create(const char *name)
 	}
 	
 	// add stuff here as needed
+	lock->locked = 0;
 	
 	return lock;
 }
@@ -125,7 +126,8 @@ lock_destroy(struct lock *lock)
 	assert(lock != NULL);
 
 	// add stuff here as needed
-	
+	kfree(lock->locked);
+
 	kfree(lock->name);
 	kfree(lock);
 }
@@ -134,26 +136,39 @@ void
 lock_acquire(struct lock *lock)
 {
 	// Write this
+        assert(lock != NULL);
+        assert(in_interrupt == 0);
+        while (lock->locked == 1) {
+	        thread_sleep(lock);
+	}
+	assert(lock->locked == 0);
+	lock->locked = 1;
 
-	(void)lock;  // suppress warning until code gets written
+	//(void)lock;  // suppress warning until code gets written
 }
 
 void
 lock_release(struct lock *lock)
 {
 	// Write this
+	assert(lock != NULL);
+	lock->locked = 0;
+	assert(lock->locked == 0);
+	thread_wakeup(lock);
 
-	(void)lock;  // suppress warning until code gets written
+	//(void)lock;  // suppress warning until code gets written
 }
 
 int
 lock_do_i_hold(struct lock *lock)
 {
 	// Write this
+	assert(lock != NULL);
+	return lock->locked;
 
-	(void)lock;  // suppress warning until code gets written
+	//(void)lock;  // suppress warning until code gets written
 
-	return 1;    // dummy until code gets written
+	//return 1;    // dummy until code gets written
 }
 
 ////////////////////////////////////////////////////////////
