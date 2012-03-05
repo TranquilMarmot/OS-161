@@ -19,11 +19,13 @@ static void talkingThread(void* whatever, unsigned long threadNum){
 		kprintf("%d", wat);
 }
 
-static void threadfun(int numThreads){
+static void threadfun(int nargs, char **args){
+	(void)args;
+
 	char name[16];
 
 	int i, result;
-	for(i = 0; i < numThreads; i++){
+	for(i = 0; i < nargs; i++){
 		kprintf("Thread fun! Starting number %d\n", i);
 
 		snprintf(name, sizeof(name), "threadfun%d", i);
