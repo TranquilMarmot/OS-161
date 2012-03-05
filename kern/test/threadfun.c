@@ -8,7 +8,7 @@
 
 static struct semaphore **sem = NULL;
 
-static volatile int counter = 0;
+static int counter = 0;
 
 static void talkingThread(void* whatever, unsigned long threadNum){
 	/* what this thread will print out */
@@ -31,8 +31,8 @@ static void unsafecountingThread(void* whatever, unsigned long threadNum){
 	(void)whatever;
 
 	int i;
-	for(i = 0; i < THREAD_RUNTIME; i++){
-		counter += incamount;
+	for(i = 0; i < incamount; i++){
+		counter++;
 		kprintf("|%d|", counter);
 	}
 	
@@ -51,14 +51,14 @@ int unsafecounter(int nargs, char **args){
 	int numthreads, incamount;
 
         if(nargs == 1){
-	        numthreads = 1;
-		incamount = 1;
+	        numthreads = 15;
+		incamount = 30;
 	}else{
 	        numthreads = args[1][0] - '0';
 		incamount = args[2][0] - '0';
 	}
 
-	kprintf("Let's count, without mutex! Making %d threads that count by %d each %d times...\n", numthreads, incamount, THREAD_RUNTIME);
+	kprintf("Let's count, without mutex! Making %d threads that count by %d each...\n", numthreads, incamount);
 
 	(void)nargs;
 	(void)args;
@@ -89,7 +89,7 @@ int unsafecounter(int nargs, char **args){
 	for(i = 0; i < numthreads; i++)
 		P(sem);
 
-	kprintf("\nDone counting! Counter is now %d (expected: %d)\n", counter, numthreads * incamount * THREAD_RUNTIME);
+	kprintf("\nDone counting! Counter is now %d (expected: %d)\n", counter, numthreads * incamount);
 
 	counter = 0;
 
