@@ -15,19 +15,32 @@ static void talkingThread(void* whatever, unsigned long threadNum){
 
 	int i;
 	for(i = 0; i < THREAD_RUNTIME; i++)
-		kprintf("|%d|", wat);
+		kprintf("|%d|", wat - '0');
 }
 
 int threadfun(int nargs, char **args){
-	kprintf("Thread fun! Making %d threads...\n", nargs);
+	int numthreads;
+	if(nargs == 1){
+		/* let's just make one if there's no args */
+		numthreads = 1;
+	} else if(nargs > 3){
+		/* too many args! */
+		kprintf("Usage: tfun1 [numthreads]");
+		return 0;
+	} else{
+		/* grab the first character of the second arg as an int (neat trick!) */
+		numthreads = args[1][0] - '0';
+	}
+
+
+	kprintf("Thread fun! Making %d threads...\n", numthreads);
+	
 	(void)args;
 
 	char name[16];
 
 	int i, result;
-	for(i = 0; i < nargs; i++){
-		//kprintf("Thread fun! Starting number %d\n", i);
-
+	for(i = 0; i < numthreads; i++){
 		snprintf(name, sizeof(name), "threadfun%d", i);
 
 		result = thread_fork(
