@@ -433,9 +433,8 @@ static const char *testmenu[] = {
 	"[fs3] FS write stress       (4)     ",
 	"[fs4] FS write stress 2     (4)     ",
 	"[fs5] FS create stress      (4)     ",
-#if OPT_A2
+
 	"[tfun1] Thread fun!                 ",
-#endif
 	NULL
 };
 
@@ -547,9 +546,7 @@ static struct {
 	{ "fs4",	writestress2 },
 	{ "fs5",	createstress },
 
-#if OPT_A2
 	{"tfun1",      threadfun },
-#endif
 
 	{ NULL, NULL }
 };

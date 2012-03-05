@@ -1,4 +1,3 @@
-#if OPT_A2
 #include <types.h>
 #include <lib.h>
 #include <synch.h>
@@ -19,7 +18,7 @@ static void talkingThread(void* whatever, unsigned long threadNum){
 		kprintf("%d", wat);
 }
 
-static void threadfun(int nargs, char **args){
+int threadfun(int nargs, char **args){
 	(void)args;
 
 	char name[16];
@@ -44,6 +43,6 @@ static void threadfun(int nargs, char **args){
 				strerror(result)
 			);
 	}
-}
 
-#endif /* OPTA2 */
+	return 0;
+}

@@ -46,4 +46,7 @@ void menu(char *argstr);
 /* Routine for running userlevel test code. */
 int runprogram(char *progname);
 
+/* Added by TranquilMarmot*/
+int threadfun(int, char **);
+
 #endif /* _TEST_H_ */
