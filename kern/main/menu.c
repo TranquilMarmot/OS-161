@@ -435,6 +435,7 @@ static const char *testmenu[] = {
 	"[fs5] FS create stress      (4)     ",
 
 	"[tfun1] Thread fun!                 ",
+	"[tfun2] Unsafe thread counting!     ",
 	NULL
 };
 
@@ -546,7 +547,8 @@ static struct {
 	{ "fs4",	writestress2 },
 	{ "fs5",	createstress },
 
-	{"tfun1",      threadfun },
+	{"tfun1",       threadfun },
+	{"tfun2",       unsafecounter },
 
 	{ NULL, NULL }
 };

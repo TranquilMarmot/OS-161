@@ -8,6 +8,8 @@
 
 static struct semaphore **sem = NULL;
 
+static volatile int counter = 0;
+
 static void talkingThread(void* whatever, unsigned long threadNum){
 	/* what this thread will print out */
 	int wat = '0' + threadNum;
@@ -22,6 +24,21 @@ static void talkingThread(void* whatever, unsigned long threadNum){
 	V(sem);
 }
 
+static void unsafecountingThread(void* whatever, unsigned long threadNum){
+	/* only way i could get this to work (???) */
+	int incamount = '0' +  (threadNum - '0');
+
+	(void)whatever;
+
+	int i;
+	for(i = 0; i < THREAD_RUNTIME; i++){
+		counter += incamount;
+		kprintf("|%d|", counter);
+	}
+	
+	V(sem);
+}
+
 static void initSem(void){
 	if(sem == NULL){
 		sem = sem_create("sem", 0);
@@ -30,23 +47,67 @@ static void initSem(void){
 	}
 }
 
+int unsafecounter(int nargs, char **args){
+	int numthreads, incamount;
+
+        if(nargs == 1){
+	        numthreads = 1;
+		incamount = 1;
+	}else{
+	        numthreads = args[1][0] - '0';
+		incamount = args[2][0] - '0';
+	}
+
+	kprintf("Let's count, without mutex! Making %d threads that count by %d each %d times...\n", numthreads, incamount, THREAD_RUNTIME);
+
+	(void)nargs;
+	(void)args;
+
+	initSem();
+
+	char name[16];
+
+	int i, result;
+	for(i = 0; i < numthreads; i++){
+		snprintf(name, sizeof(name), "count%d", i);
+
+		result = thread_fork(
+				name,
+				NULL,
+				incamount,
+				unsafecountingThread,
+				NULL
+			);
+
+		if(result)
+			panic(
+				"unsafecount: thread_fork failed %s)\n",
+				strerror(result)
+			 );
+	}
+
+	for(i = 0; i < numthreads; i++)
+		P(sem);
+
+	kprintf("\nDone counting! Counter is now %d (expected: %d)\n", counter, numthreads * incamount * THREAD_RUNTIME);
+
+	counter = 0;
+
+	return 0;
+}
+
 int threadfun(int nargs, char **args){
 	int numthreads;
-	if(nargs == 1){
-		/* let's just make one if there's no args */
+
+	if(nargs == 1)
 		numthreads = 1;
-	} else if(nargs > 3){
-		/* too many args! */
-		kprintf("Usage: tfun1 [numthreads]");
-		return 0;
-	} else{
-		/* grab the first character of the second arg as an int (neat trick!) */
+	else
 		numthreads = args[1][0] - '0';
-	}
 
 
 	kprintf("Thread fun! Making %d threads...\n", numthreads);
 	
+	(void)nargs;
 	(void)args;
 
 	initSem();
@@ -67,7 +128,7 @@ int threadfun(int nargs, char **args){
 
 		if(result)
 			panic(
-				"threadtest: thread_fork failed %s)\n",
+				"threadfun: thread_fork failed %s)\n",
 				strerror(result)
 			);
 	}
