@@ -6,6 +6,8 @@
 
 #define THREAD_RUNTIME 100
 
+static struct semaphore **sem = NULL;
+
 static void talkingThread(void* whatever, unsigned long threadNum){
 	/* what this thread will print out */
 	int wat = '0' + threadNum;
@@ -16,6 +18,16 @@ static void talkingThread(void* whatever, unsigned long threadNum){
 	int i;
 	for(i = 0; i < THREAD_RUNTIME; i++)
 		kprintf("|%d|", wat - '0');
+
+	V(sem);
+}
+
+static void initSem(void){
+	if(sem == NULL){
+		sem = sem_create("sem", 0);
+		if(sem == NULL)
+			panic("threadtest: sem_create failed\n");
+	}
 }
 
 int threadfun(int nargs, char **args){
@@ -37,6 +49,8 @@ int threadfun(int nargs, char **args){
 	
 	(void)args;
 
+	initSem();
+
 	char name[16];
 
 	int i, result;
@@ -57,6 +71,9 @@ int threadfun(int nargs, char **args){
 				strerror(result)
 			);
 	}
+
+	for(i = 0; i < numthreads; i++)
+		P(sem);
 
 	return 0;
 }
