@@ -436,7 +436,7 @@ static const char *testmenu[] = {
 
 	"[tfun1] Thread fun!                 ",
 	"[tfun2] Unsafe thread counting!     ",
-	"[tfun3] Safe thread counting!       ",
+	//"[tfun3] Safe thread counting!       ",
 	NULL
 };
 
@@ -550,7 +550,7 @@ static struct {
 
 	{"tfun1",       threadfun },
 	{"tfun2",       unsafecounter },
-	{"tfun3",       safecounter },
+	//{"tfun3",       safecounter },
 
 	{ NULL, NULL }
 };

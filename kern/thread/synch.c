@@ -122,8 +122,15 @@ lock_create(const char *name)
 
 void
 lock_destroy(struct lock *lock)
-{
+{	
+	int spl;
+
 	assert(lock != NULL);
+
+	spl = splhigh();
+	assert(thread_hassleepers(lock) == 0);
+	splx(spl);
+
 
 	// add stuff here as needed
 	kfree(lock->locked);
@@ -136,13 +143,17 @@ void
 lock_acquire(struct lock *lock)
 {
 	// Write this
+	int spl;
         assert(lock != NULL);
-        assert(in_interrupt == 0);
+	assert(in_interrupt == 0);
+	spl = splhigh();
+
         while (lock->locked == 1) {
 	        thread_sleep(lock);
 	}
 	assert(lock->locked == 0);
 	lock->locked = 1;
+	splx(spl);
 
 	//(void)lock;  // suppress warning until code gets written
 }
@@ -151,10 +162,13 @@ void
 lock_release(struct lock *lock)
 {
 	// Write this
+	int spl;
 	assert(lock != NULL);
+	spl = splhigh();
 	lock->locked = 0;
 	assert(lock->locked == 0);
 	thread_wakeup(lock);
+	splx(spl);
 
 	//(void)lock;  // suppress warning until code gets written
 }

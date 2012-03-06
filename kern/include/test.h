@@ -49,5 +49,6 @@ int runprogram(char *progname);
 /* Added by TranquilMarmot*/
 int threadfun(int, char **);
 int unsafecounter(int, char **);
+int safecounter(int, char **);
 
 #endif /* _TEST_H_ */
