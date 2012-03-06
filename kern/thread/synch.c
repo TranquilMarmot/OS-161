@@ -98,9 +98,7 @@ V(struct semaphore *sem)
 //
 // Lock.
 
-struct lock *
-lock_create(const char *name)
-{
+struct lock * lock_create(const char *name){
 	struct lock *lock;
 
 	lock = kmalloc(sizeof(struct lock));
@@ -114,75 +112,66 @@ lock_create(const char *name)
 		return NULL;
 	}
 	
-	// add stuff here as needed
 	lock->locked = 0;
 	
 	return lock;
 }
 
-void
-lock_destroy(struct lock *lock)
-{	
+void lock_destroy(struct lock *lock){	
 	int spl;
 
 	assert(lock != NULL);
 
 	spl = splhigh();
+	// make sure there's no sleeping threads using this lock
 	assert(thread_hassleepers(lock) == 0);
 	splx(spl);
 
-
-	// add stuff here as needed
 	kfree(lock->locked);
-
 	kfree(lock->name);
 	kfree(lock);
 }
 
-void
-lock_acquire(struct lock *lock)
-{
-	// Write this
+void lock_acquire(struct lock *lock){
 	int spl;
         assert(lock != NULL);
+	// don't lock it we're in an interrupt!
 	assert(in_interrupt == 0);
 	spl = splhigh();
 
+	// sleep the thread until the lock is available
         while (lock->locked == 1) {
 	        thread_sleep(lock);
 	}
-	assert(lock->locked == 0);
-	lock->locked = 1;
-	splx(spl);
 
-	//(void)lock;  // suppress warning until code gets written
+	// make sure the lock is unlocked now
+	assert(lock->locked == 0);
+
+	// lock the lock
+	lock->locked = 1;
+
+	splx(spl);
 }
 
-void
-lock_release(struct lock *lock)
-{
-	// Write this
+void lock_release(struct lock *lock){
 	int spl;
 	assert(lock != NULL);
 	spl = splhigh();
+
+	// set locked to 0 and wake up the thread
 	lock->locked = 0;
 	assert(lock->locked == 0);
 	thread_wakeup(lock);
-	splx(spl);
 
-	//(void)lock;  // suppress warning until code gets written
+	splx(spl);
 }
 
-int
-lock_do_i_hold(struct lock *lock)
-{
-	// Write this
+int lock_do_i_hold(struct lock *lock){
+	// make sure lock isn't null
 	assert(lock != NULL);
+
+	// simple enough!
 	return lock->locked;
-
-	//(void)lock;  // suppress warning until code gets written
-
-	//return 1;    // dummy until code gets written
 }
 
 ////////////////////////////////////////////////////////////
