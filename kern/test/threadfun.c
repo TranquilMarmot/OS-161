@@ -203,6 +203,8 @@ int threadfun(int nargs, char **args){
 				NULL
 			);
 
+		thread_printall();
+
 		if(result)
 			panic(
 				"threadfun: thread_fork failed %s)\n",

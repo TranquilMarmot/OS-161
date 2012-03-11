@@ -628,3 +628,29 @@ mi_threadstart(void *data1, unsigned long data2,
 	/* Done. */
 	thread_exit();
 }
+
+
+/*
+ * Dump the thread queues
+ */
+void thread_printall(void){
+	/* Turn interrupts off so the lists print atomically. */
+	int spl = splhigh();
+
+	kprintf("sleepers:\n");
+	int i;
+	for(i = 0; i < array_getnum(sleepers); i++){
+		struct thread *t = array_getguy(sleepers, i);
+		kprintf("  %2d: %s %p\n", i, t->t_name, t->t_sleepaddr);
+	}
+
+	kprintf("\nzombies:\n");
+	for(i = 0; i < array_getnum(zombies); i++){
+		struct thread *t = array_getguy(zombies, i);
+		kprintf("  %2d: %s %p\n", i, t->t_name, t->t_sleepaddr);
+       	}
+
+	kprintf("\n");
+
+	splx(spl);
+}
