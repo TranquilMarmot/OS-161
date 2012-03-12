@@ -44,7 +44,7 @@ int nettest(int, char **);
 void menu(char *argstr);
 
 /* Routine for running userlevel test code. */
-int runprogram(char *progname);
+int runprogram(char *progname, int nargs, char **args);
 
 /* Added by TranquilMarmot*/
 int threadfun(int, char **);

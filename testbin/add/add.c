@@ -13,9 +13,18 @@
 int
 main(int argc, char *argv[])
 {
+	printf("IN ADD- There are %d args\nAttempting to print them...", argc);
+	int whatever;
+	for(whatever = 0; whatever < argc; whatever++){
+		char *arg = argv[whatever];
+		printf("%s\n", arg);
+	}
+
+
 	int i, j;
 
 	if (argc != 3) {
+		printf("Incorrect usage of add\n");
 		errx(1, "Usage: add num1 num2");
 	}
 

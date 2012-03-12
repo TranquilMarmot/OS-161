@@ -69,7 +69,8 @@ cmd_progthread(void *ptr, unsigned long nargs)
 
 	strcpy(progname, args[0]);
 
-	result = runprogram(progname);
+	//result = runprogram(progname);
+	result = runprogram(progname, nargs, args);
 	if (result) {
 		kprintf("Running program %s failed: %s\n", args[0],
 			strerror(result));
@@ -557,6 +558,13 @@ static struct {
 	{ NULL, NULL }
 };
 
+static void printArgs(int nargs, char **args){
+	kprintf("args:\n");
+	int i;
+	for(i = 0; i < nargs; i++)
+		kprintf("%s\n", args[i]);
+}
+
 /*
  * Process a single command.
  */
@@ -593,6 +601,7 @@ cmd_dispatch(char *cmd)
 
 			gettime(&beforesecs, &beforensecs);
 
+			//printArgs(nargs, args);
 			result = cmdtable[i].func(nargs, args);
 
 			gettime(&aftersecs, &afternsecs);

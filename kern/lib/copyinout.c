@@ -153,9 +153,11 @@ copyout(const void *src, userptr_t userdest, size_t len)
 
 	result = copycheck(userdest, len, &stoplen);
 	if (result) {
+		kprintf("failed copy check\n");
 		return result;
 	}
 	if (stoplen != len) {
+		kprintf("stoplen != len\n");
 		/* Single block, can't legally truncate it. */
 		return EFAULT;
 	}
@@ -164,6 +166,7 @@ copyout(const void *src, userptr_t userdest, size_t len)
 
 	result = setjmp(curthread->t_pcb.pcb_copyjmp);
 	if (result) {
+		kprintf("efault\n");
 		curthread->t_pcb.pcb_badfaultfunc = NULL;
 		return EFAULT;
 	}
