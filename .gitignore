@@ -1,3 +1,4 @@
 defs.mk
 .cvsignore
 cscope.out
+kern/compile
